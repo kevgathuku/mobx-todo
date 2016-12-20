@@ -36,17 +36,17 @@ const TodoList = observer(class TodoList extends Component {
   }
 
   onNewTodo = () => {
-    this.props.store.addTodo(prompt('Enter a new todo:','coffee plz'));
+    this.props.store.addTodo(prompt('Enter a new todo:','moar coffee'));
   }
 
   addRemoteTodo = () => {
     const store = this.props.store;
     const todoId = getRandomInt(1, 200);
-    store.pendingRequests++;
+    store.incrementPendingRequests();
     request
       .get(`https://jsonplaceholder.typicode.com/todos/${todoId}`)
       .end((err, res) => {
-        store.pendingRequests--;
+        store.decrementPendingRequests();
         if (!err) return store.addTodo(res.body.title);
         return store.addTodo('Random Todo ' + Math.random());
       });

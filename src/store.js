@@ -1,4 +1,5 @@
 import {
+  action,
   autorun,
   extendObservable
 } from 'mobx';
@@ -20,23 +21,27 @@ class ObservableTodoStore {
       get report() {
         if (this.todos.length === 0) {
           return "Add a Todo Below";
-        }
-        else if (this.completedTodosCount === this.todos.length) {
+        } else if (this.completedTodosCount === this.todos.length) {
           return "All Todos are Complete. Add another below";
         }
         // return the first incomplete todo item rather than the first item
         return `Next todo: "${this.firstIncompleteTodo.task}". ` +
           `Progress: ${this.completedTodosCount}/${this.todos.length}`;
-      }
+      },
+      addTodo: action(function(task) {
+        this.todos.push({
+          task: task,
+          completed: false,
+          assignee: null
+        });
+      }),
+      incrementPendingRequests: action(function() {
+        this.pendingRequests = this.pendingRequests + 1;
+      }),
+      decrementPendingRequests: action(function() {
+        this.pendingRequests = this.pendingRequests - 1;
+      }),
     })
-  }
-
-  addTodo(task) {
-    this.todos.push({
-      task: task,
-      completed: false,
-      assignee: null
-    });
   }
 }
 
