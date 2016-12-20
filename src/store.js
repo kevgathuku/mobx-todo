@@ -6,7 +6,6 @@ import {
 
 class ObservableTodoStore {
   constructor() {
-    autorun(() => console.log(this.report));
     extendObservable(this, {
       todos: [],
       pendingRequests: 0,
@@ -42,6 +41,7 @@ class ObservableTodoStore {
         this.pendingRequests = this.pendingRequests - 1;
       }),
     })
+    autorun(() => console.log(this.report));
   }
 }
 
