@@ -21,7 +21,7 @@ const TodoList = observer(class TodoList extends Component {
               <button className="button button-primary" onClick={ this.onNewTodo }>New Todo</button>
             </div>
             <div className="two columns">
-              <button className="button button-primary" onClick={ this.onNewTodo }>Load Remote Todo</button>
+              <button className="button button-primary" onClick={ this.addRemoteTodo }>Load Remote Todo</button>
             </div>
           </div>
           <small> (double-click a todo to edit)</small>
@@ -31,6 +31,15 @@ const TodoList = observer(class TodoList extends Component {
 
   onNewTodo = () => {
     this.props.store.addTodo(prompt('Enter a new todo:','coffee plz'));
+  }
+
+  addRemoteTodo = () => {
+    const store = this.props.store;
+    store.pendingRequests++;
+    setTimeout(function() {
+        store.addTodo('Random Todo ' + Math.random());
+        store.pendingRequests--;
+    }, 2000);
   }
 })
 
