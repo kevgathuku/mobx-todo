@@ -14,11 +14,18 @@ class ObservableTodoStore {
           todo => todo.completed === true
         ).length;
       },
-      // TODO: Refactor this to show the next incomplete TODO
+      get firstIncompleteTodo() {
+        return this.todos.find(todo => todo.completed === false);
+      },
       get report() {
-        if (this.todos.length === 0)
+        if (this.todos.length === 0) {
           return "Add a Todo Below";
-        return `Next todo: "${this.todos[0].task}". ` +
+        }
+        else if (this.completedTodosCount === this.todos.length) {
+          return "All Todos are Complete. Add another below";
+        }
+        // return the first incomplete todo item rather than the first item
+        return `Next todo: "${this.firstIncompleteTodo.task}". ` +
           `Progress: ${this.completedTodosCount}/${this.todos.length}`;
       }
     })
