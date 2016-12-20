@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import TodoList from './App';
+import observableTodoStore from './store';
 import './index.css';
 
 ReactDOM.render(
-  <App />,
+  <TodoList store={ observableTodoStore } />,
   document.getElementById('root')
 );

@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {observer} from 'mobx-react';
+import TodoView from './TodoView';
 
-class App extends Component {
+const TodoList = observer(class TodoList extends Component {
   render() {
+    const store = this.props.store;
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <div className="container">
+        <div className="u-full-width">
+          <h5> { store.report } </h5>
+          <ol>
+          { store.todos.map(
+            (todo, idx) => <TodoView todo={ todo } key={ idx } />
+          ) }
+          </ol>
+          { store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null }
+          </div>
+          <div className="row">
+            <div className="two columns">
+              <button className="button button-primary" onClick={ this.onNewTodo }>New Todo</button>
+            </div>
+            <div className="two columns">
+              <button className="button button-primary" onClick={ this.onNewTodo }>Load Remote Todo</button>
+            </div>
+          </div>
+          <small> (double-click a todo to edit)</small>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
     );
   }
-}
 
-export default App;
+  onNewTodo = () => {
+    this.props.store.addTodo(prompt('Enter a new todo:','coffee plz'));
+  }
+})
+
+export default TodoList;
