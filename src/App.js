@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import {observer} from 'mobx-react';
+import request from 'superagent';
 import TodoView from './TodoView';
+
+// Returns a random integer between min (included) and max (excluded)
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
 
 const TodoList = observer(class TodoList extends Component {
   render() {
@@ -35,11 +41,15 @@ const TodoList = observer(class TodoList extends Component {
 
   addRemoteTodo = () => {
     const store = this.props.store;
+    const todoId = getRandomInt(1, 200);
     store.pendingRequests++;
-    setTimeout(function() {
-        store.addTodo('Random Todo ' + Math.random());
+    request
+      .get(`https://jsonplaceholder.typicode.com/todos/${todoId}`)
+      .end((err, res) => {
         store.pendingRequests--;
-    }, 2000);
+        if (!err) return store.addTodo(res.body.title);
+        return store.addTodo('Random Todo ' + Math.random());
+      });
   }
 })
 
